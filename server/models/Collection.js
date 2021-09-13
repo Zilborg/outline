@@ -6,6 +6,7 @@ import { SLUG_URL_REGEX } from "../../shared/utils/routeHelpers";
 import { Op, DataTypes, sequelize } from "../sequelize";
 import slugify from "../utils/slugify";
 import CollectionUser from "./CollectionUser";
+import User from "./User"
 import Document from "./Document";
 
 const Collection = sequelize.define(
@@ -207,9 +208,25 @@ Collection.addHook("afterDestroy", async (model: Collection) => {
   });
 });
 
-Collection.addHook("afterCreate", (model: Collection, options) => {
+Collection.addHook("afterCreate", async (model: Collection, options) => {
   if (model.permission !== "read_write") {
-    return CollectionUser.findOrCreate({
+    const admins = await User.findAll({
+      where:{
+        isAdmin: true
+      }
+    });
+    await admins.forEach(
+      async admin => {
+        await CollectionUser.create({
+            collectionId: model.id,
+            permission: "read_write",
+            userId: admin.id,
+            createdById: model.createdById,
+        });
+      }
+    );
+
+    await CollectionUser.findOrCreate({
       where: {
         collectionId: model.id,
         userId: model.createdById,
