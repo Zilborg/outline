@@ -323,6 +323,7 @@ router.post("collections.add_user", auth(), async (ctx) => {
       createdById: ctx.state.user.id,
     });
   } else if (permission) {
+    authorize(ctx.state.user, "changePermissionAdmin", membership.userId);
     membership.permission = permission;
     await membership.save();
   }
@@ -357,6 +358,8 @@ router.post("collections.remove_user", auth(), async (ctx) => {
 
   const user = await User.findByPk(userId);
   authorize(ctx.state.user, "read", user);
+
+  authorize(ctx.state.user, "removeAdmin", user);
 
   await collection.removeUser(user);
 
