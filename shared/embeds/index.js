@@ -6,6 +6,7 @@ import Airtable from "./Airtable";
 import Cawemo from "./Cawemo";
 import ClickUp from "./ClickUp";
 import Codepen from "./Codepen";
+import Jsitor from "./Jsitor";
 import Descript from "./Descript";
 import Diagrams from "./Diagrams";
 import Figma from "./Figma";
@@ -88,6 +89,13 @@ export default [
     icon: () => <Img src="/images/codepen.png" />,
     component: Codepen,
     matcher: matcher(Codepen),
+  },
+  {
+    title: "Jsitor",
+    keywords: "code editor",
+    icon: () => <Img src="/images/jsitor.png" />,
+    component: Jsitor,
+    matcher: matcher(Jsitor),
   },
   {
     title: "Descript",
