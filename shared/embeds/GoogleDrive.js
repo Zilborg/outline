@@ -3,7 +3,7 @@ import * as React from "react";
 import Frame from "./components/Frame";
 import Image from "./components/Image";
 
-const URL_REGEX = new RegExp("^https?://drive.google.com/file/d/(.*)$");
+const URL_REGEX = new RegExp("^https?://drive.google.com/drive/folders/(.*)$");
 
 type Props = {|
   attrs: {|
@@ -18,7 +18,10 @@ export default class GoogleDrive extends React.Component<Props> {
   render() {
     return (
       <Frame
-        src={this.props.attrs.href.replace("/view", "/preview")}
+        {...this.props}
+        src={this.props.attrs.href
+          .replace("drive/folders/", "/embeddedfolderview?id=")
+          .replace("?usp=sharing","#grid")}
         icon={
           <Image
             src="/images/google-drive.png"
